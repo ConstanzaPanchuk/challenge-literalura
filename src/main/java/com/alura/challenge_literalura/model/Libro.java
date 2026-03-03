@@ -1,33 +1,51 @@
 package com.alura.challenge_literalura.model;
 
 import com.alura.challenge_literalura.dto.DatosLibros;
+import jakarta.persistence.*;
 
-
+@Entity
+@Table(name = "libros")
 public class Libro {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String titulo;
-    private Autor autor;
     private String idioma;
     private Double cantidadDeDescargas;
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
+    private Autor autor;
+
+    public Libro() {}
 
     @Override
     public String toString() {
-        return "Libro{" +
-                "titulo='" + titulo + '\'' +
-                ", autor='" + autor + '\'' +
-                ", idioma='" + idioma + '\'' +
-                ", cantidadDeDescargas=" + cantidadDeDescargas +
-                '}';
+        return """
+                ---------------------------------------------
+                Título: %s
+                Autor: %s
+                Idioma: %s
+                Descargas: %.0f
+                ---------------------------------------------"""
+                .formatted(
+                        titulo,
+                        autor != null ? autor.getNombre() : "Desconocido",
+                        idioma,
+                        cantidadDeDescargas != null ? cantidadDeDescargas : 0
+                );
     }
 
-    public Libro (DatosLibros datosLibros){
+    public Libro (DatosLibros datosLibros, Autor autor){
         this.titulo = datosLibros.titulo();
-        this.autor = datosLibros.autores().isEmpty()
-                ? null
-                : new Autor(datosLibros.autores().get(0));
         this.idioma = datosLibros.idiomas().isEmpty()
                 ? "Idioma Desconocido"
-                :datosLibros.idiomas().get(0);
+                : datosLibros.idiomas().get(0);
         this.cantidadDeDescargas = datosLibros.cantidadDeDescargas();
+        this.autor = autor;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getTitulo() {
