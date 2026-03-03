@@ -2,32 +2,32 @@ package com.alura.challenge_literalura.model;
 
 import com.alura.challenge_literalura.dto.DatosLibros;
 
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
 
 public class Libro {
     private String titulo;
-    private String autores;
-    private String idiomas;
+    private Autor autor;
+    private String idioma;
     private Double cantidadDeDescargas;
 
     @Override
     public String toString() {
         return "Libro{" +
                 "titulo='" + titulo + '\'' +
-                ", autores='" + autores + '\'' +
-                ", idiomas='" + idiomas + '\'' +
+                ", autor='" + autor + '\'' +
+                ", idioma='" + idioma + '\'' +
                 ", cantidadDeDescargas=" + cantidadDeDescargas +
                 '}';
     }
 
     public Libro (DatosLibros datosLibros){
         this.titulo = datosLibros.titulo();
-        this.autores = datosLibros.autores().stream()
-                .map(a -> a.nombre())
-                .collect(Collectors.joining(", "));
-        this.idiomas = String.join(", ", datosLibros.idiomas());
-        this.cantidadDeDescargas = getCantidadDeDescargas();
+        this.autor = datosLibros.autores().isEmpty()
+                ? null
+                : new Autor(datosLibros.autores().get(0));
+        this.idioma = datosLibros.idiomas().isEmpty()
+                ? "Idioma Desconocido"
+                :datosLibros.idiomas().get(0);
+        this.cantidadDeDescargas = datosLibros.cantidadDeDescargas();
     }
 
     public String getTitulo() {
@@ -38,20 +38,20 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public String getAutores() {
-        return autores;
+    public Autor getAutor() {
+        return autor;
     }
 
-    public void setAutores(String autores) {
-        this.autores = autores;
+    public void setAutor(Autor autor) {
+        this.autor = autor;
     }
 
-    public String getIdiomas() {
-        return idiomas;
+    public String getIdioma() {
+        return idioma;
     }
 
-    public void setIdiomas(String idiomas) {
-        this.idiomas = idiomas;
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
     }
 
     public Double getCantidadDeDescargas() {

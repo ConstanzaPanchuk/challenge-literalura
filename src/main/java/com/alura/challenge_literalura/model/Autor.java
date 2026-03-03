@@ -2,10 +2,24 @@ package com.alura.challenge_literalura.model;
 
 import com.alura.challenge_literalura.dto.DatosAutor;
 
+
 public class Autor {
     private String nombre;
     private Integer fechaDeNacimiento;
     private Integer fechaDeFallecimiento;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Autor autor)) return false;
+        return nombre != null && nombre.equals(autor.nombre);
+    }
+
+    @Override
+    public int hashCode() {
+        return nombre != null ? nombre.hashCode() : 0;
+    }
+
 
     @Override
     public String toString() {
